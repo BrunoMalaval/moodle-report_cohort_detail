@@ -7,6 +7,7 @@ For a selected cohort, search and display :
 - courses uses this cohort as enrolment method
 
 Users need to have capacity moodle/cohort:view in SYSTEM context to access report
+
 Show only courses where users have capacity enrol/cohort:config
 
 TODO Provide more detailed description here.
