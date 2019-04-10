@@ -1,6 +1,10 @@
-# Detail des cohortes #
+# moodle-report_cohortdetail #
 
 TODO Describe the plugin shortly here.
+
+For a selected cohort, search and display :
+- cohort's member
+- courses uses this cohort as enrolment method
 
 TODO Provide more detailed description here.
 
