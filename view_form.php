@@ -27,54 +27,49 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 
 class cohortdetail_form extends moodleform {
-    
+
     private $cohortid;
-    
-     public function __construct($cohortid) {
-         $this->cohortid = $cohortid;
-         parent::__construct();
-     }
+
+    public function __construct($cohortid) {
+        $this->cohortid = $cohortid;
+        parent::__construct();
+    }
 
     public function definition() {
         global $CFG;        
         global $DB;
-        
+
         $mform = $this->_form; 
-        
-        if(isset($_POST['cohortid'])) {
-            $cohortid = $_POST['cohortid'] ;
+
+        if (isset($_POST['cohortid'])) {
+            $cohortid = $_POST['cohortid'];
         } else {
             $cohortid = 0;
         }
-        
-        //$cohorts=$DB->get_records_menu('cohort', array('visible' => 1, 'contextid' => 1), 'name', 'id, name');
 
         $sql = "SELECT c.id as ci, c.name as cn, c.description as cd
                   FROM {cohort} c
                  WHERE c.visible = :visible AND c.contextid = :context
               ORDER BY cn";
         $params = array('visible' => 1, 'context' => 1);
-        $results = $DB->get_records_sql($sql, $params) ;
-            
+        $results = $DB->get_records_sql($sql, $params);
+
         foreach ($results as $cohort) {
             $cohorts[$cohort->ci] = $cohort->cn.' ('.$cohort->cd.' )';
         }
-//        $selectCohort = $mform->addElement('select', 'cohortid', get_string('cohort', 'report_cohortdetail'), $cohorts);
-//        $selectCohort->setMultiple(false);
 
-        $options = array(                                                                                                           
+        $options = array(
             'multiple' => false,
-            //'noselectionstring' => get_string('allareas', 'search'),
             'showsuggestions' => true ,
             'placeholder' => 'Saisir le nom de la cohorte',
-        );         
+        );
         $mform->addElement('autocomplete', 'cohortid', get_string('cohort', 'report_cohortdetail'), $cohorts, $options);
 
-        $this->add_action_buttons($cancel = false, $submitlabel=get_string('display', 'report_cohortdetail'));
+        $this->add_action_buttons($cancel = false, $submitlabel = get_string('display', 'report_cohortdetail'));
 
     }
-    //Custom validation should be added here
-    function validation($data, $files) {
+    //Custom validation should be added here.
+    public function validation($data, $files) {
         return array();
     }
 }

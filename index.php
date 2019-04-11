@@ -68,7 +68,7 @@ if ($dataform = $mform->get_data()) {
              WHERE c.id = :cohortid AND c.visible = :visible AND c.contextid = :context
           ORDER BY ul";
     $params = array('cohortid' => $cohortid, 'visible' => 1, 'context' => 1);
-    $users = $DB->get_records_sql($sql, $params) ;
+    $users = $DB->get_records_sql($sql, $params);
 
     $utable = new html_table();
     $utable->head = array(get_string('username', 'report_cohortdetail'),
@@ -83,7 +83,7 @@ if ($dataform = $mform->get_data()) {
     echo html_writer::tag('h3', get_string('members', 'report_cohortdetail'));
     echo html_writer::table($utable);
 
-    // construct and display courses table
+    // Construct and display courses table.
 
     $sql = "SELECT c.id as ci, c.category as cc, c.fullname as cf
               FROM {course} c
@@ -100,14 +100,14 @@ if ($dataform = $mform->get_data()) {
     foreach ($courseslist as $course) {
         $context = context_course::instance($course->ci);
         $category = $DB->get_record('course_categories', array('id' => $course->cc));
-        if(has_capability('enrol/cohort:config', $context)) {
-            $cats=explode("/",$category->path); 
+        if (has_capability('enrol/cohort:config', $context)) {
+            $cats = explode("/", $category->path);
             $countcats = count($cats);
             unset($catpath);
-            for($counter = 1; $counter < $countcats; $counter++) {
+            for ($counter = 1; $counter < $countcats; $counter++) {
                 $catname = $DB->get_record("course_categories", array("id" => $cats[$counter]));
                 $catpath = $catpath.' / '.$catname->name;
-            } 
+            }
             $clink = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$course->ci.'">'.$course->cf.'</a>';
             $ctable->data[] = array($clink, $catpath);
         }
@@ -123,12 +123,6 @@ if ($dataform = $mform->get_data()) {
 
     $mform->display();
 
-    // Test : $nav = new \report_cohortdetail\output\index_page('Mon premier texte ...');
-    // Test : echo $output->render($nav);
-
 }
-
-
-
 
 echo $output->footer();
