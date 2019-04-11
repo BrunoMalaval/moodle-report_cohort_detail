@@ -36,10 +36,10 @@ class cohortdetail_form extends moodleform {
     }
 
     public function definition() {
-        global $CFG;        
+        global $CFG;
         global $DB;
 
-        $mform = $this->_form; 
+        $mform = $this->_form;
 
         if (isset($_POST['cohortid'])) {
             $cohortid = $_POST['cohortid'];
@@ -68,7 +68,7 @@ class cohortdetail_form extends moodleform {
         $this->add_action_buttons($cancel = false, $submitlabel = get_string('display', 'report_cohortdetail'));
 
     }
-    //Custom validation should be added here.
+    // Custom validation should be added here.
     public function validation($data, $files) {
         return array();
     }
