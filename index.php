@@ -30,11 +30,9 @@ require_once(dirname(__FILE__) . '/view_form.php');
 
 global $DB;
 
-/*
-Check capability / require login and 'moodle/cohort:view' in SYSTEM context 
-*/
+// Check capability / require login and 'moodle/cohort:view' in SYSTEM context
 
-$context = context_system::instance() ;
+$context = context_system::instance();
 require_login();
 require_capability('moodle/cohort:view', $context);
 
@@ -125,8 +123,8 @@ if ($dataform = $mform->get_data()) {
 
     $mform->display();
     
-//$nav = new \report_cohortdetail\output\index_page('Mon premier texte ...');
-//echo $output->render($nav);
+// Test : $nav = new \report_cohortdetail\output\index_page('Mon premier texte ...');
+// Test : echo $output->render($nav);
 
 }
 
