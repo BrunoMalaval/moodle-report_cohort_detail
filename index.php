@@ -30,7 +30,7 @@ require_once(dirname(__FILE__) . '/view_form.php');
 
 global $DB;
 
-// Check capability / require login and 'moodle/cohort:view' in SYSTEM context
+// Check capability / require login and 'moodle/cohort:view' in SYSTEM context.
 
 $context = context_system::instance();
 require_login();
@@ -52,29 +52,29 @@ echo $output->heading($pagetitle);
 
 $mform = new cohortdetail_form($CFG->wwwroot.'/report/cohortdetail/index.php');
 
-// Display form and results
+// Display form and results.
 
 if ($dataform = $mform->get_data()) {
     $mform->display();
 
-    $cohortid=$dataform->cohortid;
+    $cohortid = $dataform->cohortid;
 
-    // construct and display cohort members table
-    
+    // Construct and display cohort members table.
+
     $sql = "SELECT u.username as un ,u.lastname as ul ,u.firstname as uf, u.idnumber as ui
-              FROM {user} u 
+              FROM {user} u
               JOIN {cohort_members} cm ON cm.userid = u.id
               JOIN {cohort} c ON c.id = cm.cohortid
              WHERE c.id = :cohortid AND c.visible = :visible AND c.contextid = :context
           ORDER BY ul";
     $params = array('cohortid' => $cohortid, 'visible' => 1, 'context' => 1);
     $users = $DB->get_records_sql($sql, $params) ;
-            
+
     $utable = new html_table();
     $utable->head = array(get_string('username', 'report_cohortdetail'),
         get_string('idnumber', 'report_cohortdetail'),
         get_string('fullname', 'report_cohortdetail'));
-    
+
     foreach ($users as $user) {
         $utable->data[] = array($user->un, $user->ui, "( ".$user->ul." ".$user->uf." )");
     }
@@ -89,24 +89,24 @@ if ($dataform = $mform->get_data()) {
               FROM {course} c
               JOIN {enrol} e ON e.courseid = c.id
              WHERE e.enrol like 'cohort' AND e.customint1 = :cohortid
-          ORDER BY c.fullname" ;
+          ORDER BY c.fullname";
     $params = array('cohortid' => $cohortid);
-    $coursesList = $DB->get_records_sql($sql, $params) ;
+    $courseslist = $DB->get_records_sql($sql, $params);
 
     $ctable = new html_table();
     $ctable->head = array(get_string('coursename', 'report_cohortdetail'),
         get_string('categorypath', 'report_cohortdetail'));
 
-    foreach ($coursesList as $course) {
+    foreach ($courseslist as $course) {
         $context = context_course::instance($course->ci);
-        $category = $DB->get_record('course_categories',array('id'=>$course->cc)); 
+        $category = $DB->get_record('course_categories', array('id' => $course->cc));
         if(has_capability('enrol/cohort:config', $context)) {
             $cats=explode("/",$category->path); 
-            $countcats=sizeof($cats);
-            unset($catpath) ;
-            for($counter=1;$counter<$countcats;$counter++) {
-                $catname = $DB->get_record("course_categories", array("id" => $cats[$counter]) );
-                $catpath = $catpath.' / '.$catname->name ;
+            $countcats = count($cats);
+            unset($catpath);
+            for($counter = 1; $counter < $countcats; $counter++) {
+                $catname = $DB->get_record("course_categories", array("id" => $cats[$counter]));
+                $catpath = $catpath.' / '.$catname->name;
             } 
             $clink = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$course->ci.'">'.$course->cf.'</a>';
             $ctable->data[] = array($clink, $catpath);
@@ -118,13 +118,13 @@ if ($dataform = $mform->get_data()) {
     echo html_writer::table($ctable);
 
 
-  
+
 } else {
 
     $mform->display();
-    
-// Test : $nav = new \report_cohortdetail\output\index_page('Mon premier texte ...');
-// Test : echo $output->render($nav);
+
+    // Test : $nav = new \report_cohortdetail\output\index_page('Mon premier texte ...');
+    // Test : echo $output->render($nav);
 
 }
 
