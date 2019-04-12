@@ -138,9 +138,9 @@ if ($dataform = $mform->get_data()) {
         $courseslist = $DB->get_records_sql($sql, $params);
 
         $ctable = new html_table();
-//        $ctable->head = array(get_string('coursename', 'report_cohortdetail'),
-//            get_string('categorypath', 'report_cohortdetail'));
-        $ctable->head = array(get_string('coursename', 'report_cohortdetail'));
+        $ctable->head = array(get_string('coursename', 'report_cohortdetail'),
+            get_string('cohorts'));
+//        $ctable->head = array(get_string('coursename', 'report_cohortdetail'));
 
         foreach ($courseslist as $course) {
             $context = context_course::instance($course->ci);
@@ -154,9 +154,22 @@ if ($dataform = $mform->get_data()) {
                     $catpath = $catpath.' / '.$catname->name;
                 }
                 $clink = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$course->ci.'">'.$course->cf.'</a>';
-                $mycourse = array($clink, $catpath);
-//                $ctable->data[] = array($clink, $catpath);
-                $ctable->data[] = array($mycourse);
+                $mycourse = $clink.'<br>'.$catpath;
+
+                $sql = "SELECT c.name as cn
+                          FROM {cohort} c
+                          JOIN {enrol} e ON e.customint1 = c.id
+                         WHERE e.enrol like 'cohort' AND e.courseid = :courseid
+                      ORDER BY c.name";
+                $params = array('courseid' => $course->ci);
+                $cohortslist = $DB->get_records_sql($sql, $params);
+                if (count($cohortslist) > 0) {
+                    $cl = '';
+                    foreach ($cohortslist as $cohort) {
+                        $cl = $cl.'<br>'.$cohort->cn;
+                    }
+                    $ctable->data[] = array($mycourse,$cl);
+                }
             }
         }
 
@@ -164,7 +177,6 @@ if ($dataform = $mform->get_data()) {
         echo html_writer::tag('h3', get_string('courses', 'report_cohortdetail'));
         echo html_writer::table($ctable);
 
-        echo "#TO DO : liste de mes cours";
     }
 
 } else {
