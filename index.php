@@ -55,69 +55,80 @@ $mform = new cohortdetail_form($CFG->wwwroot.'/report/cohortdetail/index.php');
 // Display form and results.
 
 if ($dataform = $mform->get_data()) {
+
     $mform->display();
 
     $cohortid = $dataform->cohortid;
 
     // Construct and display cohort members table.
 
-    $sql = "SELECT u.username as un ,u.lastname as ul ,u.firstname as uf, u.idnumber as ui
-              FROM {user} u
-              JOIN {cohort_members} cm ON cm.userid = u.id
-              JOIN {cohort} c ON c.id = cm.cohortid
-             WHERE c.id = :cohortid AND c.visible = :visible AND c.contextid = :context
-          ORDER BY ul";
-    $params = array('cohortid' => $cohortid, 'visible' => 1, 'context' => 1);
-    $users = $DB->get_records_sql($sql, $params);
+    if(isset($dataform->membersbutton)) {
 
-    $utable = new html_table();
-    $utable->head = array(get_string('username', 'report_cohortdetail'),
-        get_string('idnumber', 'report_cohortdetail'),
-        get_string('fullname', 'report_cohortdetail'));
+        $sql = "SELECT u.username as un ,u.lastname as ul ,u.firstname as uf, u.idnumber as ui
+                  FROM {user} u
+                  JOIN {cohort_members} cm ON cm.userid = u.id
+                  JOIN {cohort} c ON c.id = cm.cohortid
+                 WHERE c.id = :cohortid AND c.visible = :visible AND c.contextid = :context
+              ORDER BY ul";
+        $params = array('cohortid' => $cohortid, 'visible' => 1, 'context' => 1);
+        $users = $DB->get_records_sql($sql, $params);
 
-    foreach ($users as $user) {
-        $utable->data[] = array($user->un, $user->ui, "( ".$user->ul." ".$user->uf." )");
+        $utable = new html_table();
+        $utable->head = array(get_string('username', 'report_cohortdetail'),
+            get_string('idnumber', 'report_cohortdetail'),
+            get_string('fullname', 'report_cohortdetail'));
+
+        foreach ($users as $user) {
+            $utable->data[] = array($user->un, $user->ui, "( ".$user->ul." ".$user->uf." )");
+        }
+
+        echo("<hr>");
+        echo html_writer::tag('h3', get_string('members', 'report_cohortdetail'));
+        echo html_writer::table($utable);
+
     }
-
-    echo("<hr>");
-    echo html_writer::tag('h3', get_string('members', 'report_cohortdetail'));
-    echo html_writer::table($utable);
 
     // Construct and display courses table.
 
-    $sql = "SELECT c.id as ci, c.category as cc, c.fullname as cf
-              FROM {course} c
-              JOIN {enrol} e ON e.courseid = c.id
-             WHERE e.enrol like 'cohort' AND e.customint1 = :cohortid
-          ORDER BY c.fullname";
-    $params = array('cohortid' => $cohortid);
-    $courseslist = $DB->get_records_sql($sql, $params);
+    if(isset($dataform->coursesbutton)) {
 
-    $ctable = new html_table();
-    $ctable->head = array(get_string('coursename', 'report_cohortdetail'),
-        get_string('categorypath', 'report_cohortdetail'));
+        $sql = "SELECT c.id as ci, c.category as cc, c.fullname as cf
+                  FROM {course} c
+                  JOIN {enrol} e ON e.courseid = c.id
+                 WHERE e.enrol like 'cohort' AND e.customint1 = :cohortid
+              ORDER BY c.fullname";
+        $params = array('cohortid' => $cohortid);
+        $courseslist = $DB->get_records_sql($sql, $params);
 
-    foreach ($courseslist as $course) {
-        $context = context_course::instance($course->ci);
-        $category = $DB->get_record('course_categories', array('id' => $course->cc));
-        if (has_capability('enrol/cohort:config', $context)) {
-            $cats = explode("/", $category->path);
-            $countcats = count($cats);
-            unset($catpath);
-            for ($counter = 1; $counter < $countcats; $counter++) {
-                $catname = $DB->get_record("course_categories", array("id" => $cats[$counter]));
-                $catpath = $catpath.' / '.$catname->name;
+        $ctable = new html_table();
+        $ctable->head = array(get_string('coursename', 'report_cohortdetail'),
+            get_string('categorypath', 'report_cohortdetail'));
+
+        foreach ($courseslist as $course) {
+            $context = context_course::instance($course->ci);
+            $category = $DB->get_record('course_categories', array('id' => $course->cc));
+            if (has_capability('enrol/cohort:config', $context)) {
+                $cats = explode("/", $category->path);
+                $countcats = count($cats);
+                unset($catpath);
+                for ($counter = 1; $counter < $countcats; $counter++) {
+                    $catname = $DB->get_record("course_categories", array("id" => $cats[$counter]));
+                    $catpath = $catpath.' / '.$catname->name;
+                }
+                $clink = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$course->ci.'">'.$course->cf.'</a>';
+                $ctable->data[] = array($clink, $catpath);
             }
-            $clink = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$course->ci.'">'.$course->cf.'</a>';
-            $ctable->data[] = array($clink, $catpath);
         }
+
+        echo("<hr>");
+        echo html_writer::tag('h3', get_string('courses', 'report_cohortdetail'));
+        echo html_writer::table($ctable);
+
     }
 
-    echo("<hr>");
-    echo html_writer::tag('h3', get_string('courses', 'report_cohortdetail'));
-    echo html_writer::table($ctable);
-
-
+    if(isset($dataform->mycoursesbutton)) {
+        echo "#TO DO : liste de mes cours";
+    }
 
 } else {
 
