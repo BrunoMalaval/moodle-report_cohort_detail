@@ -28,7 +28,7 @@ require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/formslib.php');
 require_once(dirname(__FILE__) . '/view_form.php');
 
-global $DB;
+global $DB, $USER;
 
 // Check capability / require login and 'moodle/cohort:view' in SYSTEM context.
 
@@ -127,6 +127,40 @@ if ($dataform = $mform->get_data()) {
     }
 
     if(isset($dataform->mycoursesbutton)) {
+
+        $sql = "SELECT c.id AS ci, c.fullname AS cf, c.category AS cc
+                  FROM {course} c
+                  JOIN {context} ctx ON c.id = ctx.instanceid
+                  JOIN {role_assignments} ra ON ra.contextid = ctx.id
+                  JOIN {user} AS u ON u.id = ra.userid
+                 WHERE u.id = :userid";
+        $params = array('userid' => $USER->id);
+        $courseslist = $DB->get_records_sql($sql, $params);
+
+        $ctable = new html_table();
+        $ctable->head = array(get_string('coursename', 'report_cohortdetail'),
+            get_string('categorypath', 'report_cohortdetail'));
+
+        foreach ($courseslist as $course) {
+            $context = context_course::instance($course->ci);
+            $category = $DB->get_record('course_categories', array('id' => $course->cc));
+            if (has_capability('enrol/cohort:config', $context)) {
+                $cats = explode("/", $category->path);
+                $countcats = count($cats);
+                unset($catpath);
+                for ($counter = 1; $counter < $countcats; $counter++) {
+                    $catname = $DB->get_record("course_categories", array("id" => $cats[$counter]));
+                    $catpath = $catpath.' / '.$catname->name;
+                }
+                $clink = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$course->ci.'">'.$course->cf.'</a>';
+                $ctable->data[] = array($clink, $catpath);
+            }
+        }
+
+        echo("<hr>");
+        echo html_writer::tag('h3', get_string('courses', 'report_cohortdetail'));
+        echo html_writer::table($ctable);
+
         echo "#TO DO : liste de mes cours";
     }
 
