@@ -138,8 +138,9 @@ if ($dataform = $mform->get_data()) {
         $courseslist = $DB->get_records_sql($sql, $params);
 
         $ctable = new html_table();
-        $ctable->head = array(get_string('coursename', 'report_cohortdetail'),
-            get_string('categorypath', 'report_cohortdetail'));
+//        $ctable->head = array(get_string('coursename', 'report_cohortdetail'),
+//            get_string('categorypath', 'report_cohortdetail'));
+        $ctable->head = array(get_string('coursename', 'report_cohortdetail'));
 
         foreach ($courseslist as $course) {
             $context = context_course::instance($course->ci);
@@ -153,7 +154,9 @@ if ($dataform = $mform->get_data()) {
                     $catpath = $catpath.' / '.$catname->name;
                 }
                 $clink = '<a href="'.$CFG->wwwroot.'/course/view.php?id='.$course->ci.'">'.$course->cf.'</a>';
-                $ctable->data[] = array($clink, $catpath);
+                $mycourse = array($clink, $catpath);
+//                $ctable->data[] = array($clink, $catpath);
+                $ctable->data[] = array($mycourse);
             }
         }
 
