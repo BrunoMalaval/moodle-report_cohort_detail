@@ -62,7 +62,7 @@ if ($dataform = $mform->get_data()) {
 
     // Construct and display cohort members table.
 
-    if(isset($dataform->membersbutton)) {
+    if (isset($dataform->membersbutton)) {
 
         $sql = "SELECT u.username as un ,u.lastname as ul ,u.firstname as uf, u.idnumber as ui
                   FROM {user} u
@@ -90,7 +90,7 @@ if ($dataform = $mform->get_data()) {
 
     // Construct and display courses table.
 
-    if(isset($dataform->coursesbutton)) {
+    if (isset($dataform->coursesbutton)) {
 
         $sql = "SELECT c.id as ci, c.category as cc, c.fullname as cf
                   FROM {course} c
@@ -128,13 +128,13 @@ if ($dataform = $mform->get_data()) {
 
     // Construct and display "my courses" table.
 
-    if(isset($dataform->mycoursesbutton)) {
+    if (isset($dataform->mycoursesbutton)) {
 
         $sql = "SELECT c.id AS ci, c.fullname AS cf, c.category AS cc
                   FROM {course} c
                   JOIN {context} ctx ON c.id = ctx.instanceid
                   JOIN {role_assignments} ra ON ra.contextid = ctx.id
-                  JOIN {user} AS u ON u.id = ra.userid
+                  JOIN {user} u ON u.id = ra.userid
                  WHERE u.id = :userid";
         $params = array('userid' => $USER->id);
         $courseslist = $DB->get_records_sql($sql, $params);
@@ -169,7 +169,7 @@ if ($dataform = $mform->get_data()) {
                     foreach ($cohortslist as $cohort) {
                         $cl = $cl.'<br>'.$cohort->cn;
                     }
-                    $ctable->data[] = array($mycourse,$cl);
+                    $ctable->data[] = array($mycourse, $cl);
                 }
             }
         }

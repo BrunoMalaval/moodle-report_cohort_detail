@@ -64,7 +64,7 @@ class cohortdetail_form extends moodleform {
         );
         $mform->addElement('autocomplete', 'cohortid', get_string('cohort', 'report_cohortdetail'), $cohorts, $options);
 
-        $buttonarray=array();
+        $buttonarray = array();
         $buttonarray[] = $mform->createElement('submit', 'membersbutton', 'Membres');
         $buttonarray[] = $mform->createElement('submit', 'coursesbutton', 'Cours');
         $buttonarray[] = $mform->createElement('submit', 'mycoursesbutton', 'Mes cours');
