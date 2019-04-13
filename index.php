@@ -126,6 +126,8 @@ if ($dataform = $mform->get_data()) {
 
     }
 
+    // Construct and display "my courses" table.
+
     if(isset($dataform->mycoursesbutton)) {
 
         $sql = "SELECT c.id AS ci, c.fullname AS cf, c.category AS cc
@@ -139,8 +141,7 @@ if ($dataform = $mform->get_data()) {
 
         $ctable = new html_table();
         $ctable->head = array(get_string('coursename', 'report_cohortdetail'),
-            get_string('cohorts'));
-//        $ctable->head = array(get_string('coursename', 'report_cohortdetail'));
+            get_string('cohorts', 'report_cohortdetail'));
 
         foreach ($courseslist as $course) {
             $context = context_course::instance($course->ci);
@@ -174,7 +175,7 @@ if ($dataform = $mform->get_data()) {
         }
 
         echo("<hr>");
-        echo html_writer::tag('h3', get_string('courses', 'report_cohortdetail'));
+        echo html_writer::tag('h3', get_string('mycourses', 'report_cohortdetail'));
         echo html_writer::table($ctable);
 
     }

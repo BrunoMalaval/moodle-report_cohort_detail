@@ -61,7 +61,6 @@ class cohortdetail_form extends moodleform {
         $options = array(
             'multiple' => false,
             'showsuggestions' => true ,
-            // 'placeholder' => 'Saisir le nom de la cohorte',
         );
         $mform->addElement('autocomplete', 'cohortid', get_string('cohort', 'report_cohortdetail'), $cohorts, $options);
 
@@ -71,8 +70,6 @@ class cohortdetail_form extends moodleform {
         $buttonarray[] = $mform->createElement('submit', 'mycoursesbutton', 'Mes cours');
         $buttonarray[] = $mform->createElement('cancel');
         $mform->addGroup($buttonarray, 'buttonar', '', ' ', false);
-
-//        $this->add_action_buttons($cancel = false, $submitlabel = get_string('display', 'report_cohortdetail'));
 
     }
     // Custom validation should be added here.

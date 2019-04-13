@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['cohort'] = 'Cohorte';
+$string['cohorts'] = 'Cohortes';
 $string['courses'] = 'Cours';
 $string['categorypath'] = 'Catégorie';
 $string['coursename'] = 'Nom du cours';
@@ -34,6 +35,7 @@ $string['cohortdetail'] = 'Voir les utilisateurs/cours par cohorte';
 $string['fullname'] = 'Nom complet';
 $string['idnumber'] = 'Numéro d\'identification';
 $string['members'] = 'Membres';
+$string['mycourses'] = 'Mes cours';
 $string['pluginname'] = 'Detail des cohortes ';
 $string['privacy:metadata'] = 'Le rapport "Détail des cohortes" ne stocke aucune donnée personnelle.';
 $string['username'] = 'Nom d\'utilisateur';
