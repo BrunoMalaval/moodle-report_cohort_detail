@@ -43,6 +43,11 @@ $pagetitle = $title;
 $url = new moodle_url("/report/cohortdetail/index.php");
 $PAGE->set_url($url);
 $PAGE->set_title($title);
+$navigationinfo = array(
+        'name' => get_string('pluginname', 'report_cohortdetail'),
+        'url' => new moodle_url('/report/cohortdetail/index.php')
+    );
+$PAGE->add_report_nodes($USER->id, $navigationinfo);
 $PAGE->set_heading($title);
 
 $output = $PAGE->get_renderer('report_cohortdetail');
