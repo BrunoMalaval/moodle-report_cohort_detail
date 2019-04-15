@@ -1,16 +1,26 @@
 # moodle-report_cohortdetail #
 
-TODO Describe the plugin shortly here.
+This plugin is under development, but works as it stands
+
+Provides a report on cohorts members and use of them as enrolment method
 
 For a selected cohort, search and display :
-- cohort's member
-- courses uses this cohort as enrolment method
+- cohort's member list
+- courses list which use this cohort as enrolment method
+  Show only courses where users have capacity enrol/cohort:config
+
+Without take care of selected cohort
+- courses list with cohorts use as enrolment method
+  course must have at least one cohort enrolment method
+  Show only courses where users have capacity enrol/cohort:config
 
 Users need to have capacity moodle/cohort:view in SYSTEM context to access report
 
-Show only courses where users have capacity enrol/cohort:config
+## Installation ##
 
-TODO Provide more detailed description here.
+Unzip the report in the /report directory of your Moodle installation.
+
+Rename the folder as "cohortdetail"
 
 ## License ##
 
