@@ -69,7 +69,7 @@ class cohortdetail_form extends moodleform {
         $buttonarray[] = $mform->createElement('submit', 'coursesbutton', 'Cours');
         $buttonarray[] = $mform->createElement('submit', 'mycoursesbutton', 'Mes cours');
         $buttonarray[] = $mform->createElement('cancel');
-        $mform->addGroup($buttonarray, 'buttonar', '', ' ', false);
+        $mform->addGroup($buttonarray, 'buttonarray', '', ' ', false);
 
     }
     // Custom validation should be added here.
