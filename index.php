@@ -32,9 +32,9 @@ global $DB, $USER;
 
 // Check capability / require login and 'moodle/cohort:view' in SYSTEM context.
 
-$context = context_system::instance();
+//$context = context_system::instance();
 require_login();
-require_capability('moodle/cohort:view', $context);
+//require_capability('moodle/cohort:view', $context);
 
 admin_externalpage_setup('reportcohortdetail');
 
@@ -42,18 +42,15 @@ $title = get_string('pluginname', 'report_cohortdetail');
 $pagetitle = $title;
 $url = new moodle_url("/report/cohortdetail/index.php");
 $PAGE->set_url($url);
-$PAGE->set_title($title);
+
 $navigationinfo = array(
         'name' => get_string('pluginname', 'report_cohortdetail'),
         'url' => new moodle_url('/report/cohortdetail/index.php')
     );
 $PAGE->add_report_nodes($USER->id, $navigationinfo);
-$PAGE->set_heading($title);
 
-$output = $PAGE->get_renderer('report_cohortdetail');
-
-echo $output->header();
-echo $output->heading($pagetitle);
+echo $OUTPUT->header();
+echo $OUTPUT->heading($pagetitle);
 
 $mform = new cohortdetail_form($CFG->wwwroot.'/report/cohortdetail/index.php');
 
@@ -88,7 +85,8 @@ if ($dataform = $mform->get_data()) {
         }
 
         echo("<hr>");
-        echo html_writer::tag('h3', get_string('members', 'report_cohortdetail'));
+        $membersct = count($users);
+        echo html_writer::tag('h3', get_string('members', 'report_cohortdetail')." ( ".$membersct." )");
         echo html_writer::table($utable);
 
     }
@@ -126,7 +124,8 @@ if ($dataform = $mform->get_data()) {
         }
 
         echo("<hr>");
-        echo html_writer::tag('h3', get_string('courses', 'report_cohortdetail'));
+        $selectcohort = $DB->get_record("cohort", array("id" => $cohortid));
+        echo html_writer::tag('h3', get_string('courses', 'report_cohortdetail')." ( ".$selectcohort->name." )");
         echo html_writer::table($ctable);
 
     }
@@ -191,4 +190,4 @@ if ($dataform = $mform->get_data()) {
 
 }
 
-echo $output->footer();
+echo $OUTPUT->footer();
