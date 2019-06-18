@@ -113,7 +113,8 @@ if ($dataform = $mform->get_data()) {
             if (has_capability('enrol/cohort:config', $context)) {
                 $cats = explode("/", $category->path);
                 $countcats = count($cats);
-                unset($catpath);
+                //unset($catpath);
+                $catpath = '';
                 for ($counter = 1; $counter < $countcats; $counter++) {
                     $catname = $DB->get_record("course_categories", array("id" => $cats[$counter]));
                     $catpath = $catpath.' / '.$catname->name;
@@ -153,7 +154,8 @@ if ($dataform = $mform->get_data()) {
             if (has_capability('enrol/cohort:config', $context)) {
                 $cats = explode("/", $category->path);
                 $countcats = count($cats);
-                unset($catpath);
+                //unset($catpath);
+                $catpath = '';
                 for ($counter = 1; $counter < $countcats; $counter++) {
                     $catname = $DB->get_record("course_categories", array("id" => $cats[$counter]));
                     $catpath = $catpath.' / '.$catname->name;
