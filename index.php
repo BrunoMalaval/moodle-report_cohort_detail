@@ -110,7 +110,7 @@ if ($dataform = $mform->get_data()) {
         foreach ($courseslist as $course) {
             $context = context_course::instance($course->ci);
             $category = $DB->get_record('course_categories', array('id' => $course->cc));
-            if (has_capability('enrol/cohort:config', $context)) {
+            if (has_capability('enrol/cohort:config', $context) || is_siteadmin()) {
                 $cats = explode("/", $category->path);
                 $countcats = count($cats);
                 //unset($catpath);
@@ -151,7 +151,7 @@ if ($dataform = $mform->get_data()) {
         foreach ($courseslist as $course) {
             $context = context_course::instance($course->ci);
             $category = $DB->get_record('course_categories', array('id' => $course->cc));
-            if (has_capability('enrol/cohort:config', $context)) {
+            if (has_capability('enrol/cohort:config', $context) || is_siteadmin()) {
                 $cats = explode("/", $category->path);
                 $countcats = count($cats);
                 //unset($catpath);
