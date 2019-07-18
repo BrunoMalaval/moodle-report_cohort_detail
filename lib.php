@@ -37,7 +37,6 @@ function report_cohortdetail_myprofile_navigation(core_user\output\myprofile\tre
     }
 
     $context = context_system::instance();
-    // $context = context_user::instance($USER->id);
     if (has_capability('moodle/cohort:view', $context)) {
         $node = new core_user\output\myprofile\node('reports', 'cohortdetail',
                 'Detail des cohortes', null, new moodle_url('/report/cohortdetail/index.php'));

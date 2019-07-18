@@ -32,9 +32,7 @@ global $DB, $USER;
 
 // Check capability / require login and 'moodle/cohort:view' in SYSTEM context.
 
-//$context = context_system::instance();
 require_login();
-//require_capability('moodle/cohort:view', $context);
 
 admin_externalpage_setup('reportcohortdetail');
 
@@ -113,7 +111,6 @@ if ($dataform = $mform->get_data()) {
             if (has_capability('enrol/cohort:config', $context) || is_siteadmin()) {
                 $cats = explode("/", $category->path);
                 $countcats = count($cats);
-                //unset($catpath);
                 $catpath = '';
                 for ($counter = 1; $counter < $countcats; $counter++) {
                     $catname = $DB->get_record("course_categories", array("id" => $cats[$counter]));
@@ -134,15 +131,20 @@ if ($dataform = $mform->get_data()) {
     // Construct and display "my courses" table.
 
     if (isset($dataform->mycoursesbutton)) {
-
-        $sql = "SELECT c.id AS ci, c.fullname AS cf, c.category AS cc
-                  FROM {course} c
-                  JOIN {context} ctx ON c.id = ctx.instanceid
-                  JOIN {role_assignments} ra ON ra.contextid = ctx.id
-                  JOIN {user} u ON u.id = ra.userid
-                 WHERE u.id = :userid";
-        $params = array('userid' => $USER->id);
-        $courseslist = $DB->get_records_sql($sql, $params);
+        if (is_siteadmin()) {
+            $sql = "SELECT c.id AS ci, c.fullname AS cf, c.category AS cc
+                      FROM {course} c WHERE c.id > 1";
+            $courseslist = $DB->get_records_sql($sql, null);
+        } else {
+            $sql = "SELECT c.id AS ci, c.fullname AS cf, c.category AS cc
+                      FROM {course} c
+                      JOIN {context} ctx ON c.id = ctx.instanceid
+                      JOIN {role_assignments} ra ON ra.contextid = ctx.id
+                      JOIN {user} u ON u.id = ra.userid
+                     WHERE u.id = :userid";
+            $params = array('userid' => $USER->id);
+            $courseslist = $DB->get_records_sql($sql, $params);
+        }
 
         $ctable = new html_table();
         $ctable->head = array(get_string('coursename', 'report_cohortdetail'),
@@ -154,7 +156,6 @@ if ($dataform = $mform->get_data()) {
             if (has_capability('enrol/cohort:config', $context) || is_siteadmin()) {
                 $cats = explode("/", $category->path);
                 $countcats = count($cats);
-                //unset($catpath);
                 $catpath = '';
                 for ($counter = 1; $counter < $countcats; $counter++) {
                     $catname = $DB->get_record("course_categories", array("id" => $cats[$counter]));

@@ -25,7 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$ADMIN->add('reports', new admin_externalpage('reportcohortdetail', get_string('pluginname', 'report_cohortdetail'), "$CFG->wwwroot/report/cohortdetail/index.php", 'moodle/cohort:view'));
+$ADMIN->add('reports', new admin_externalpage('reportcohortdetail', get_string('pluginname', 'report_cohortdetail'),
+    "$CFG->wwwroot/report/cohortdetail/index.php", 'moodle/cohort:view'));
 
 // No report settings.
 
